@@ -13,9 +13,9 @@ export function ItemTable(props) {
   return (
     props.type === 'products' ? props.products.map(p => {
       return (
-        <Tr key={p.id}>
-          <Td>{p.name}</Td>
-          <Td isNumeric>{p.price}</Td>
+        <Tr key={p.id} >
+          <Td maxW={'500px'} overflow='hidden'>{p.name}</Td>
+          <Td isNumeric>R$ {p.price}</Td>
           {props.hasOwnProperty('addCart')&&
             <Td >
               <Flex justify="center">
@@ -37,13 +37,13 @@ export function ItemTable(props) {
 
     :
 
-    props.type === 'cart' && props.cart.map(c => {
+    props.type === 'cart' ? props.cart.map(c => {
       return (
         <Tr key={c.id}>
-          <Td>{c.name}</Td>
-          <Td isNumeric>{c.price}</Td>
+          <Td maxW={'500px'} overflow='hidden'>{c.name}</Td>
+          <Td isNumeric>R$ {c.price}</Td>
           <Td isNumeric>{c.qty}</Td>
-          <Td isNumeric>{(c.qty * c.price).toFixed(2)}</Td>
+          <Td isNumeric>R$ {(c.qty * c.price).toFixed(2)}</Td>
           
           <Td >
             <Flex justify="center">
@@ -68,6 +68,17 @@ export function ItemTable(props) {
               />
             </Flex>
           </Td>
+        </Tr>
+      )
+    })
+
+    :
+    
+    props.products.map(p => {
+      return (
+        <Tr key={p.id}>
+          <Td>{p.name}</Td>
+          <Td isNumeric>{p.qty_stock}</Td>
         </Tr>
       )
     })

@@ -5,6 +5,7 @@ import { Login } from "../pages/Login";
 import { Home } from "../pages/Home";
 import { Signup } from "../pages/Signup";
 import { StockList } from "../pages/StockList";
+import { Order } from "../pages/Order";
 
 
 export function Router() {
@@ -16,6 +17,7 @@ export function Router() {
         <Route exact path="/login" element={<Login />}/>
         <Route exact path="/signup" element={<Signup />}/>
         <Route exact path="/stock" element={<StockList />}/>
+        <Route exact path="/orders" element={<Order />}/>
       </Routes>
     </BrowserRouter>
   )

@@ -1,7 +1,7 @@
 import { Flex, Image, Link } from "@chakra-ui/react";
 import { useNavigate } from "react-router-dom";
 import logo from "../../img/shopper_logo_c96d7a0414.png"
-import { goToHome, goToProducts, goToSignup, goToStockList } from "../../routes/Coordinator";
+import { goToHome, goToOrderList, goToProducts, goToSignup, goToStockList } from "../../routes/Coordinator";
 import { useLocation } from 'react-router-dom';
 
 export function Header() {
@@ -19,10 +19,29 @@ export function Header() {
                 px={2}
                 color="teal"
                 display="block"
+                onClick={() => goToProducts(navigate)}
+              >
+                Produtos
+              </Link>
+              
+              <Link
+                px={2}
+                color="teal"
+                display="block"
                 onClick={() => goToStockList(navigate)}
               >
                 Estoque
               </Link>
+              
+              <Link
+                px={2}
+                color="teal"
+                display="block"
+                onClick={() => goToOrderList(navigate)}
+              >
+                Meus pedidos
+              </Link>
+
               <Link
                 px={2}
                 onClick={() => goToHome(navigate) & localStorage.removeItem("token")}
@@ -34,7 +53,7 @@ export function Header() {
             </Flex>
           )
           :
-          location.pathname=="/signup"?
+          location.pathname==="/signup"?
           (
             <Flex justify="center" alignItems="center">
               <Link

@@ -54,7 +54,7 @@ export function StockList() {
             <Tbody>
               <ItemTable
                 products={products}
-                type={'products'}
+                type={'stock'}
               />
             </Tbody>
             <Tfoot>

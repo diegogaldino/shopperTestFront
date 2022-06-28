@@ -1,7 +1,7 @@
 
 import React, { useEffect, useState } from "react"
 
-import { Box, Button, Center, Flex, Heading, Table, TableCaption, TableContainer, Tbody, Text, Tfoot, Th, Thead, Tr, useToast } from '@chakra-ui/react'
+import { Box, Button, Center, Flex, Heading, Spinner, Table, TableCaption, TableContainer, Tbody, Text, Tfoot, Th, Thead, Tr, useToast } from '@chakra-ui/react'
 import axios from "axios"
 import { baseURL, config } from "../../parameters"
 
@@ -26,7 +26,12 @@ export function Products() {
   useEffect(() => {
     getAllProducts()
     getUserById()
+    getCartLocal()
   }, [])
+
+  const getCartLocal = () =>{
+    setCart(JSON.parse(localStorage.getItem("cart")))
+  }
 
   const getAllProducts = async () => {
     try {
@@ -95,7 +100,7 @@ export function Products() {
         products: cart,
         delivery: deliveryDate
       }
-      console.log(order, deliveryDate)
+
       await axios.post(`${baseURL}/order/register`, order, config)
 
 
@@ -108,6 +113,7 @@ export function Products() {
       })
       setCart([])
       setDeliveryDate(new Date())
+      localStorage.removeItem("cart")
     } catch (error) {
       toast({
         title: "Um erro ocorreu.",
@@ -124,48 +130,57 @@ export function Products() {
       <Header />
       <Flex w="100vw" flexWrap="wrap" justify="center">
 
+        {isLoading && products ?
+          <Spinner
+            mb={10}
+            thickness="6px"
+            speed="0.75s"
+            emptyColor="gray.200"
+            color="teal.500"
+            size="xl"
+          />
+          :
+          <TableContainer m={3}>
+            <Flex p={3} justify='space-between' align="center" border='1px' borderColor='gray.200' >
+              <Heading size='xl'>Lista de Produtos</Heading>
+            </Flex>
+            <Table variant='striped' colorScheme='teal'>
+              <TableCaption>Lista de produtos oferecidos Shopper</TableCaption>
+              <Thead>
+                <Tr>
+                  <Th>Produto</Th>
+                  <Th isNumeric>Preço</Th>
+                  <Th ><Center>Ação</Center></Th>
+                </Tr>
+              </Thead>
+              <Tbody>
+                <ItemTable
+                  products={products}
+                  removeCart={removeCart}
+                  addCart={addCart}
+                  type={'products'}
+                />
+              </Tbody>
+              <Tfoot>
+                <Tr>
+                  <Th>Produto</Th>
+                  <Th isNumeric>Preço</Th>
+                  <Th isNumeric><Center>Ação</Center></Th>
+                </Tr>
+              </Tfoot>
+            </Table>
+          </TableContainer>
+        }
+
         <TableContainer m={3}>
           <Flex p={3} justify='space-between' align="center" border='1px' borderColor='gray.200' >
-            <Heading size='xl'>Lista de Produtos</Heading>
-          </Flex>
-          <Table variant='striped' colorScheme='teal'>
-            <TableCaption>Lista de produtos oferecidos Shopper</TableCaption>
-            <Thead>
-              <Tr>
-                <Th>Produto</Th>
-                <Th isNumeric>Preço</Th>
-                <Th ><Center>Ação</Center></Th>
-              </Tr>
-            </Thead>
-            <Tbody>
-
-              {products&&<ItemTable
-                products={products}
-                removeCart={removeCart}
-                addCart={addCart}
-                type={'products'}
-              />}
-
-
-            </Tbody>
-            <Tfoot>
-              <Tr>
-                <Th>Produto</Th>
-                <Th isNumeric>Preço</Th>
-                <Th isNumeric><Center>Ação</Center></Th>
-              </Tr>
-            </Tfoot>
-          </Table>
-        </TableContainer>
-
-        <TableContainer m={3}>
-          <Flex p={3} justify='space-between' align="center" border='1px' borderColor='gray.200' >
-            <Text>Olá, {user.name} escolha uma data para a entrega do pedido </Text>
+            <Text>Olá, <b>{user.name}</b>  escolha uma data para a entrega do pedido </Text>
             <Box mx={2} p={1} border='1px' borderColor='teal.200' width="100px" overflow="hidden">
               <ReactDatePicker
                 selected={deliveryDate}
                 dateFormat="dd/MM/yyyy"
-                onChange={(date) => setDeliveryDate(date)} />
+                onChange={(date) => date > new Date() && setDeliveryDate(date)} 
+              />
             </Box>
           </Flex>
           {

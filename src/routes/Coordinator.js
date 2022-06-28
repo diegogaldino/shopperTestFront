@@ -13,6 +13,9 @@ export const goToLogin=(navigate)=>{
 export const goToStockList=(navigate)=>{
   navigate("/stock")
 }
+export const goToOrderList=(navigate)=>{
+  navigate("/orders")
+}
 
 export const goToBack = (navigate) => {
   navigate(-1)
